@@ -12,27 +12,34 @@ app.get("/", function (req, res) {
 });
 
 app.post("/", function (req, res) {
-  let yourRate = req.body.yourRate;
-  let exchangeRate = req.body.exchangeRate;
+  let currency = req.body.currency;
+  let crypto = req.body.crypto;
   let amount = req.body.amount;
 
-  let queryURL = "https://api.nomics.com/v1/markets?key=" + process.env.NOMICS_API_KEY;
+  // let queryURL = "https://api.nomics.com/v1/markets?key=" + process.env.NOMICS_API_KEY;
   let priceURL = "https://api.nomics.com/v1/prices?key=4329bd0fa529e2db192f7f80b06542a2";
+  let currencyURL = "https://api.nomics.com/v1/currencies/ticker?key=4329bd0fa529e2db192f7f80b06542a2"
 
   let options = {
-    url: queryURL,
+    url: currencyURL,
     method: "GET",
     qs: {
-      from: yourRate,
-      to: exchangeRate,
+      from: currency,
+      to: crypto,
       amount: amount
     }
   }
 
-  axios.get(priceURL)
+  axios.get(currencyURL)
     .then(response => {
-      res.send(response.data[1].price);
-      console.log(response.data[1].price);
+      res.send(response.data);
+      console.log(response.data);
+
+      //create date
+      let date = new Date();
+      //show date
+      res.write("<p>Todays Date: " + date.toLocaleDateString());
+
     }).catch(err => {
       console.log("Error fetching from NOMICS", err);
     });
