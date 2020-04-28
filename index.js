@@ -31,8 +31,8 @@ app.post("/", function (req, res) {
 
   axios.get(priceURL)
     .then(response => {
-      res.send(response.data);
-      console.log(response.data);
+      res.send(response.data[1].price);
+      console.log(response.data[1].price);
     }).catch(err => {
       console.log("Error fetching from NOMICS", err);
     });
